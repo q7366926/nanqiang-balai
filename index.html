@@ -615,15 +615,7 @@ body::before{
   </div>
   <div class="video-frame-outer reveal">
     <div class="video-frame" id="videoFrame">
-      <video controls preload="metadata" poster="img/hero-cover.jpg" id="mainVideo">
-        <source src="" type="video/mp4">
-        您的浏览器不支持视频播放，请升级浏览器。
-      </video>
-      <!-- 本地文件播放提示 -->
-      <div class="video-fallback" id="videoFallback">
-        <p>完整视频即将上线，敬请期待</p>
-        <button class="btn-play" onclick="tryPlay()">点击尝试播放</button>
-      </div>
+      <iframe id="bilibiliPlayer" src="//player.bilibili.com/player.html?bvid=BV1FnLv66EMW&autoplay=0&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;inset:0;width:100%;height:100%;z-index:1"></iframe>
     </div>
   </div>
   <div class="video-tabs reveal">
@@ -754,19 +746,12 @@ const sectionObserver=new IntersectionObserver((entries)=>{
 sectionIds.forEach(id=>{const el=document.getElementById(id);if(el)sectionObserver.observe(el)});
 
 /* ===== 视频切换 ===== */
-const videos=['',''];
+const bvids=['BV1FnLv66EMW','BV1fnLv6zEhy'];
 function switchVideo(i,btn){
-  const v=document.getElementById('mainVideo');
-  v.src=videos[i];
+  const p=document.getElementById('bilibiliPlayer');
+  p.src='//player.bilibili.com/player.html?bvid='+bvids[i]+'&autoplay=0&high_quality=1';
   document.querySelectorAll('.video-tab').forEach(t=>t.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  v.load();
-  document.getElementById('videoFallback').style.display='flex'
-}
-function tryPlay(){
-  const v=document.getElementById('mainVideo');
-  const promise=v.play();
-  if(promise!==undefined){promise.then(()=>{document.getElementById('videoFallback').style.display='none'}).catch(()=>{})}
 }
 
 /* ===== Lightbox ===== */
