@@ -429,7 +429,7 @@ body::before{
 
 <!-- ==================== HERO ==================== -->
 <section class="hero" id="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="img/hero-cover.jpg">
+  <video class="hero-video" id="heroVid" autoplay muted loop playsinline preload="auto" poster="img/hero-cover.jpg">
     <source src="video/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -722,6 +722,17 @@ body::before{
 </div>
 
 <script>
+/* ===== Hero视频强制播放 ===== */
+(function(){
+  const v=document.getElementById('heroVid');
+  if(!v)return;
+  v.play().catch(()=>{
+    document.addEventListener('click',function once(){v.play();document.removeEventListener('click',once);},{once:true});
+    document.addEventListener('touchstart',function once(){v.play();document.removeEventListener('touchstart',once);},{once:true});
+    window.addEventListener('scroll',function once(){v.play();window.removeEventListener('scroll',once);},{once:true});
+  });
+})();
+
 /* ===== 滚动揭示 ===== */
 const reveals=document.querySelectorAll('.reveal');
 const revealObserver=new IntersectionObserver((entries)=>{
