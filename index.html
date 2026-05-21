@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>南墙芭莱 | 广西首部街舞×民族舞跨界融合舞剧</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-void:#0a0806;--bg-deep:#110f0c;--bg-card:rgba(20,16,12,.92);
+  --gold:#c9a227;--gold-light:#e8d48b;--gold-dark:#8b7019;
+  --orange-fire:#c44a1a;--text-primary:#f0ebe0;--text-secondary:#b8a98a;--text-dim:#6b6050;
+  --border-subtle:rgba(201,162,39,.1);--border-hover:rgba(201,162,39,.25)
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--gold-dark) var(--bg-void)}
+body{background:var(--bg-void);color:var(--text-primary);font-family:'Noto Serif SC',serif;line-height:2;overflow-x:hidden}
+::selection{background:rgba(201,162,39,.3);color:#fff}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.05' numOctaves='4' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)' opacity='.6'/%3E%3C/svg%3E");
+  background-size:400px 400px
+}
+
+/* ===== 右侧章节导航 ===== */
+.chapter-nav{
+  position:fixed;right:2rem;top:50%;transform:translateY(-50%);
+  z-index:1000;display:flex;flex-direction:column;align-items:flex-end;gap:1.4rem;
+  transition:opacity .4s
+}
+.chapter-dot{
+  position:relative;display:flex;align-items:center;gap:.7rem;
+  cursor:pointer;text-decoration:none;transition:all .3s
+}
+.chapter-dot::before{
+  content:'';width:7px;height:7px;border:1px solid var(--gold-dark);
+  border-radius:50%;transition:all .4s;flex-shrink:0
+}
+.chapter-dot.active::before,.chapter-dot:hover::before{
+  background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 10px rgba(201,162,39,.4)
+}
+.chapter-label{
+  font-family:'Noto Serif SC',serif;font-size:.68rem;
+  color:var(--text-dim);letter-spacing:.15em;
+  opacity:0;transform:translateX(6px);transition:all .3s;white-space:nowrap
+}
+.chapter-dot:hover .chapter-label,.chapter-dot.active .chapter-label{opacity:1;transform:translateX(0);color:var(--gold-dark)}
+@media(max-width:1100px){.chapter-nav{display:none}}
+
+/* ===== 章节分隔线 ===== */
+.chapter-divider{
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  margin:0 auto;width:min(500px,70%);padding:0 1rem
+}
+.chapter-divider::before,.chapter-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-dark),transparent)
+}
+.divider-diamond{width:8px;height:8px;border:1px solid var(--gold-dark);transform:rotate(45deg);flex-shrink:0;transition:all .5s}
+.chapter-divider:hover .divider-diamond{border-color:var(--gold);background:rgba(201,162,39,.08)}
+
+/* ===== 滚动揭示 ===== */
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal:nth-child(2){transition-delay:.08s}
+.reveal:nth-child(3){transition-delay:.16s}
+.reveal:nth-child(4){transition-delay:.24s}
+
+/* ===== 通用章节 ===== */
+.section{
+  position:relative;z-index:1;
+  padding:clamp(5rem,12vw,10rem) clamp(2rem,6vw,8rem)
+}
+.section-header{text-align:center;margin-bottom:clamp(3rem,6vw,5rem)}
+.section-label{
+  display:inline-block;font-family:'Noto Serif SC',serif;font-weight:400;
+  font-size:.72rem;color:var(--gold-dark);letter-spacing:.5em;text-transform:uppercase;
+  margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border-subtle)
+}
+.section-title{
+  font-family:'Ma Shan Zheng',cursive;font-size:clamp(2.4rem,5.5vw,4.8rem);
+  color:var(--text-primary);line-height:1.25;letter-spacing:.04em
+}
+.section-desc{
+  color:var(--text-secondary);max-width:640px;margin:1.5rem auto 0;
+  font-size:clamp(.88rem,1.3vw,1.02rem);font-weight:300;line-height:2.3
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;width:100%;height:100vh;min-height:700px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center
+}
+.hero-video{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  object-fit:cover;z-index:1
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:
+    radial-gradient(ellipse at 35% 25%,rgba(196,74,26,.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 65% 75%,rgba(107,18,18,.1) 0%,transparent 45%),
+    linear-gradient(to bottom,rgba(10,8,6,.25) 0%,rgba(10,8,6,.5) 45%,rgba(10,8,6,.95) 100%)
+}
+.hero-fade-bottom{position:absolute;bottom:0;left:0;right:0;height:200px;z-index:3;background:linear-gradient(to top,var(--bg-void),transparent)}
+.hero-content{position:relative;z-index:10;text-align:center;padding:2rem}
+.logo-hero{
+  max-width:min(68vw,540px);height:auto;
+  filter:drop-shadow(0 0 100px rgba(201,162,39,.25));
+  animation:heroIn 2.2s cubic-bezier(.16,1,.3,1) .2s both
+}
+@keyframes heroIn{0%{opacity:0;transform:scale(.88) translateY(50px);filter:blur(14px) brightness(.6)}100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0) brightness(1)}}
+.hero-ornament{width:1px;height:0;margin:2rem auto 0;background:linear-gradient(to bottom,var(--gold),transparent);animation:lineGrow .8s ease-out 1.8s both}
+@keyframes lineGrow{to{height:56px}}
+.hero-subtitle{
+  font-family:'Noto Serif SC',serif;font-weight:300;
+  font-size:clamp(.8rem,1.5vw,1.05rem);color:var(--text-secondary);letter-spacing:.35em;
+  margin-top:1.2rem;opacity:0;animation:fadeUp .8s ease-out 2.2s both
+}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  opacity:0;animation:fadeUp .8s ease-out 3s both
+}
+.scroll-hint span{font-size:.68rem;color:var(--text-dim);letter-spacing:.3em}
+.scroll-hint-arrow{width:11px;height:11px;border-right:1.5px solid var(--gold-dark);border-bottom:1.5px solid var(--gold-dark);transform:rotate(45deg);animation:bounceDown 2s ease-in-out infinite}
+@keyframes bounceDown{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(5px)}}
+
+/* ===== 剧目简介 ===== */
+.synopsis-section{background:var(--bg-void)}
+.synopsis-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.synopsis-col{padding:clamp(2rem,5vw,5rem) clamp(1.5rem,4vw,4rem);display:flex;flex-direction:column;justify-content:center}
+.synopsis-col:first-child{border-right:1px solid var(--border-subtle)}
+.synopsis-lead{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.5rem,3vw,2.2rem);color:var(--gold-light);line-height:1.5;margin-bottom:1.5rem}
+.synopsis-body{color:var(--text-secondary);font-size:clamp(.88rem,1.2vw,1.02rem);line-height:2.4;font-weight:300}
+.synopsis-body strong{color:var(--gold-light);font-weight:600}
+@media(max-width:820px){.synopsis-grid{grid-template-columns:1fr}.synopsis-col:first-child{border-right:none;border-bottom:1px solid var(--border-subtle)}}
+
+/* ===== 剧名释义 ===== */
+.meaning-section{background:linear-gradient(180deg,var(--bg-void) 0%,var(--bg-deep) 50%,var(--bg-void) 100%);position:relative;overflow:hidden}
+.meaning-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 50%,rgba(196,74,26,.04) 0%,transparent 50%),radial-gradient(circle at 70% 50%,rgba(139,112,25,.03) 0%,transparent 40%);
+  filter:blur(80px)
+}
+.meaning-content{max-width:760px;margin:0 auto;text-align:center;position:relative}
+.meaning-quote{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,4vw,3.2rem);color:var(--gold);line-height:1.6;margin-bottom:2rem}
+.meaning-text{color:var(--text-secondary);font-size:clamp(.9rem,1.3vw,1.05rem);line-height:2.4;font-weight:300}
+.meaning-text strong{color:var(--gold-light);font-weight:600}
+
+/* ===== 文化溯源 ===== */
+.culture-section{background:var(--bg-void);position:relative}
+.culture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;max-width:1100px;margin:0 auto}
+.culture-card{
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2.5vw,2rem);
+  position:relative;overflow:hidden;transition:all .5s cubic-bezier(.16,1,.3,1)
+}
+.culture-card::before{content:'';position:absolute;top:0;left:1.2rem;right:1.2rem;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent);opacity:0;transition:opacity .5s}
+.culture-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.culture-card:hover::before{opacity:1}
+.culture-num{font-family:'Noto Serif SC',serif;font-weight:200;font-size:3rem;color:rgba(201,162,39,.06);position:absolute;top:.8rem;right:1.2rem;line-height:1}
+.culture-title{font-family:'Ma Shan Zheng',cursive;font-size:1.4rem;color:var(--gold-light);margin-bottom:.7rem;letter-spacing:.04em}
+.culture-text{color:var(--text-dim);font-size:.88rem;line-height:2.1;font-weight:300}
+@media(max-width:900px){.culture-grid{grid-template-columns:1fr;max-width:500px}}
+
+/* ===== 故事大纲 ===== */
+.story-section{background:var(--bg-deep);position:relative}
+.story-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:100px;background:linear-gradient(to bottom,transparent,var(--gold-dark))}
+.story-content{max-width:860px;margin:0 auto;columns:2;column-gap:4rem;font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--text-secondary);line-height:2.4;font-weight:300}
+.story-content p{margin-bottom:1.5em;break-inside:avoid}
+.story-content strong{color:var(--gold-light);font-weight:600}
+@media(max-width:768px){.story-content{columns:1}}
+
+/* ===== 剧目特色 ===== */
+.features-section{background:var(--bg-void)}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:960px;margin:0 auto}
+.feature-card{
+  background:var(--bg-card);border:1px solid var(--border-subtle);
+  padding:2rem 2.2rem;position:relative;transition:all .4s
+}
+.feature-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.feature-card::before{content:'';position:absolute;left:0;top:2rem;bottom:2rem;width:2px;background:linear-gradient(to bottom,var(--gold),transparent);opacity:0;transition:opacity .4s}
+.feature-card:hover::before{opacity:1}
+.feature-title{font-family:'Ma Shan Zheng',cursive;font-size:1.5rem;color:var(--gold);margin-bottom:.6rem}
+.feature-text{color:var(--text-dim);font-size:.88rem;line-height:2;font-weight:300}
+@media(max-width:700px){.features-grid{grid-template-columns:1fr}}
+
+/* ===== 编舞体系 ===== */
+.dance-section{background:var(--bg-deep)}
+.dance-content{max-width:860px;margin:0 auto;text-align:center}
+.dance-text{font-size:clamp(.95rem,1.4vw,1.1rem);color:var(--text-secondary);line-height:2.4;font-weight:300;margin-bottom:2rem}
+.dance-text strong{color:var(--gold-light);font-weight:600}
+.dance-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-top:1.5rem}
+.dance-tag{padding:.5rem 1.2rem;border:1px solid var(--border-subtle);font-size:.82rem;color:var(--text-dim);letter-spacing:.08em;transition:all .3s}
+.dance-tag:hover{border-color:var(--gold-dark);color:var(--gold-light)}
+
+/* ===== 海报轮播 ===== */
+.poster-section{background:var(--bg-void);overflow:hidden;padding-left:0;padding-right:0}
+.poster-carousel{width:100%;overflow:hidden;position:relative;padding:2rem 0}
+.poster-track{display:flex;gap:1.2rem;animation:posterScroll 45s linear infinite}
+.poster-track:hover{animation-play-state:paused}
+.poster-track img{height:520px;width:auto;object-fit:cover;border:1px solid var(--border-subtle);transition:transform .4s,box-shadow .4s;flex-shrink:0;cursor:pointer}
+.poster-track img:hover{transform:scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,.5);border-color:var(--border-hover)}
+@keyframes posterScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@media(max-width:768px){.poster-track img{height:340px}}
+
+/* ===== 人物介绍 ===== */
+.cast-section{background:var(--bg-deep);position:relative}
+.cast-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto}
+.cast-card{background:var(--bg-card);border:1px solid var(--border-subtle);overflow:hidden;transition:all .4s;position:relative}
+.cast-card:hover{border-color:var(--border-hover);transform:translateY(-3px)}
+.cast-photo{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;transition:transform .5s;filter:grayscale(.2) contrast(1.05)}
+.cast-card:hover .cast-photo{transform:scale(1.04);filter:grayscale(0) contrast(1.1)}
+.cast-info{padding:1.2rem 1.4rem}
+.cast-name{font-family:'Ma Shan Zheng',cursive;font-size:1.6rem;color:var(--gold);margin-bottom:.2rem}
+.cast-role{font-size:.7rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem}
+.cast-actor{color:var(--text-secondary);font-size:.88rem;margin-bottom:.5rem}
+.cast-desc{color:var(--text-dim);font-size:.82rem;line-height:1.9;font-weight:300}
+
+/* ===== 导演大图（无框） ===== */
+.director-section{background:var(--bg-void);position:relative;overflow:hidden}
+.director-layout{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);
+  align-items:center
+}
+.director-photo-wrap{position:relative;overflow:hidden}
+.director-photo-wrap img{
+  width:100%;display:block;
+  filter:grayscale(.15) contrast(1.08);
+  transition:filter .6s,transform .6s
+}
+.director-photo-wrap:hover img{filter:grayscale(0) contrast(1.1);transform:scale(1.02)}
+.director-photo-wrap::after{
+  content:'';position:absolute;inset:0;
+  border:1px solid rgba(201,162,39,.08);pointer-events:none;transition:border-color .4s
+}
+.director-photo-wrap:hover::after{border-color:rgba(201,162,39,.18)}
+.director-bio{padding:1rem 0}
+.director-bio .section-label{margin-bottom:1rem}
+.director-bio .section-title{margin-bottom:1.5rem;text-align:left}
+.director-bio p{color:var(--text-secondary);font-size:clamp(.9rem,1.2vw,1.05rem);line-height:2.3;font-weight:300}
+.director-credit{
+  margin-top:1.5rem;padding-top:1.2rem;
+  border-top:1px solid var(--border-subtle);
+  font-family:'Ma Shan Zheng',cursive;font-size:1.3rem;color:var(--gold-dark);letter-spacing:.06em
+}
+@media(max-width:900px){.director-layout{grid-template-columns:1fr}}
+
+/* ===== 影像（16:9 视频框） ===== */
+.video-section{
+  background:var(--bg-void);
+  border-top:1px solid var(--border-subtle);
+  border-bottom:1px solid var(--border-subtle);
+  position:relative;overflow:hidden
+}
+.video-frame-outer{max-width:1100px;margin:0 auto}
+.video-frame{
+  position:relative;width:100%;padding-top:56.25%;/* 16:9 */
+  background:#000;border:1px solid var(--border-subtle);overflow:hidden
+}
+.video-frame video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;display:block
+}
+/* 四角装饰 */
+.video-frame::before,.video-frame::after{content:'';position:absolute;width:20px;height:20px;border-color:var(--gold-dark);border-style:solid;z-index:2;pointer-events:none}
+.video-frame::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.video-frame::after{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.video-corner-br,.video-corner-bl{position:absolute;width:20px;height:20px;border:2px solid var(--gold-dark);pointer-events:none;z-index:2}
+.video-corner-bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
+.video-corner-br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.video-tabs{display:flex;justify-content:center;gap:1rem;margin-top:1.5rem}
+.video-tab{
+  padding:.6rem 2rem;font-size:.8rem;color:var(--text-dim);
+  background:transparent;border:1px solid var(--border-subtle);cursor:pointer;
+  letter-spacing:.1em;transition:all .3s;font-family:'Noto Serif SC',serif
+}
+.video-tab.active{color:var(--gold);border-color:var(--gold-dark);background:rgba(201,162,39,.06)}
+.video-tab:hover:not(.active){border-color:var(--gold-dark);color:var(--text-secondary)}
+.video-fallback{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1rem;
+  background:rgba(0,0,0,.85);z-index:3
+}
+.video-fallback p{color:var(--text-dim);font-size:.85rem;letter-spacing:.1em}
+.video-fallback .btn-play{
+  padding:.7rem 2.5rem;font-size:.82rem;color:var(--gold-dark);
+  border:1px solid var(--gold-dark);background:transparent;cursor:pointer;
+  font-family:'Noto Serif SC',serif;letter-spacing:.15em;transition:all .3s
+}
+.video-fallback .btn-play:hover{color:var(--gold);border-color:var(--gold);background:rgba(201,162,39,.06)}
+
+/* ===== 主创团队（含导演信息） ===== */
+.team-section{background:var(--bg-void)}
+.team-grid{max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.team-grid:hover img{filter:grayscale(0) contrast(1.1)}
+.team-item{
+  display:flex;align-items:baseline;gap:1rem;
+  padding:1.2rem 1.5rem;border-bottom:1px solid var(--border-subtle);transition:background .3s
+}
+.team-item:last-child{border-bottom:none}
+.team-item:hover{background:rgba(201,162,39,.03)}
+.team-role{font-size:.72rem;color:var(--gold-dark);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;min-width:90px;flex-shrink:0}
+.team-name{color:var(--text-secondary);font-size:.92rem}
+@media(max-width:700px){.team-grid{grid-template-columns:1fr}}
+
+/* ===== 演出履历 ===== */
+.history-section{background:linear-gradient(180deg,var(--bg-void),var(--bg-deep),var(--bg-void))}
+.history-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.history-item{
+  padding:1.1rem 1.5rem;border-bottom:1px solid var(--border-subtle);
+  color:var(--text-secondary);font-size:.92rem;
+  display:flex;align-items:center;gap:1rem;transition:background .3s
+}
+.history-item:hover{background:rgba(201,162,39,.03)}
+.history-dot{width:6px;height:6px;border:1px solid var(--gold-dark);border-radius:50%;flex-shrink:0;transition:all .3s}
+.history-item:hover .history-dot{background:var(--gold);border-color:var(--gold)}
+
+/* ===== 演出信息 ===== */
+.info-section{background:var(--bg-deep);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.info-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem 2rem;max-width:1000px;margin:0 auto;padding:0 1rem}
+.info-item{padding:.8rem 1.2rem;border:1px solid var(--border-subtle);background:var(--bg-card);transition:all .4s;display:inline-block;margin:.5rem}
+.info-item:hover{border-color:var(--border-hover)}
+.info-value{font-family:'Noto Serif SC',serif;font-size:clamp(1.2rem,2vw,1.8rem);font-weight:700;color:var(--gold);line-height:1.4;margin-bottom:.3rem}
+.info-label{font-size:.78rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase}
+@media(max-width:768px){.info-grid{flex-direction:column;align-items:center}}
+
+/* ===== 结尾画廊（图片区） ===== */
+.gallery-section{background:var(--bg-void);padding-left:0;padding-right:0;overflow:hidden}
+.gallery-scroll{display:flex;gap:1rem;overflow-x:auto;padding:0 2rem 1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.gallery-scroll::-webkit-scrollbar{height:3px}
+.gallery-scroll::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:2px}
+.gallery-scroll img{
+  height:420px;width:auto;object-fit:cover;
+  scroll-snap-align:start;flex-shrink:0;
+  border:1px solid var(--border-subtle);
+  cursor:pointer;transition:transform .4s,border-color .4s
+}
+.gallery-scroll img:hover{transform:scale(1.02);border-color:var(--border-hover)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:5rem 2rem 3rem;background:var(--bg-void);position:relative}
+.footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dark),transparent)}
+.footer-logo{max-width:200px;opacity:.4;margin-bottom:2rem}
+.footer-quote{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--text-dim);margin-bottom:1.5rem;letter-spacing:.08em}
+.footer-info{color:var(--text-dim);font-size:.78rem;line-height:2.2;font-weight:300}
+.footer-info a{color:var(--gold-dark);text-decoration:none;transition:color .3s}
+.footer-info a:hover{color:var(--gold)}
+
+/* ===== LIGHTBOX ===== */
+.lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.96);backdrop-filter:blur(40px);align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
+.lightbox.active{display:flex}
+.lightbox img{max-width:95vw;max-height:90vh;object-fit:contain}
+.lightbox-close{position:absolute;top:1.5rem;right:1.5rem;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--text-dim);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.lightbox-close:hover{background:rgba(255,255,255,.1);color:var(--text-primary)}
+
+/* ===== 顶部导航 ===== */
+.nav-bar{position:fixed;top:0;left:0;width:100%;padding:1rem 3rem;display:flex;justify-content:space-between;align-items:center;z-index:999;transition:all .5s}
+.nav-bar.scrolled{background:rgba(10,8,6,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-subtle)}
+.nav-logo{height:32px;filter:brightness(1.1);transition:filter .3s}
+.nav-logo:hover{filter:brightness(1.3)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-link{font-size:.76rem;color:var(--text-dim);text-decoration:none;letter-spacing:.12em;transition:color .3s;position:relative;font-family:'Noto Serif SC',serif}
+.nav-link::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-link:hover{color:var(--gold-light)}
+.nav-link:hover::after{width:100%}
+@media(max-width:900px){.nav-links{display:none}}
+
+    
+    .cast-card {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    .cast-card img {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      
+    }
+    .cast-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+      gap: 2rem !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+</style>
+</head>
+<body>
+
+<!-- 右侧章节导航 -->
+<nav class="chapter-nav" id="chapterNav">
+  <a href="#hero" class="chapter-dot active" data-section="hero"><span class="chapter-label">序章</span></a>
+  <a href="#synopsis" class="chapter-dot" data-section="synopsis"><span class="chapter-label">简介</span></a>
+  <a href="#culture" class="chapter-dot" data-section="culture"><span class="chapter-label">溯源</span></a>
+  <a href="#story" class="chapter-dot" data-section="story"><span class="chapter-label">大纲</span></a>
+  <a href="#features" class="chapter-dot" data-section="features"><span class="chapter-label">特色</span></a>
+  <a href="#dance" class="chapter-dot" data-section="dance"><span class="chapter-label">编舞</span></a>
+  <a href="#posters" class="chapter-dot" data-section="posters"><span class="chapter-label">海报</span></a>
+  <a href="#cast" class="chapter-dot" data-section="cast"><span class="chapter-label">人物</span></a>
+  <a href="#video" class="chapter-dot" data-section="video"><span class="chapter-label">影像</span></a>
+  <a href="#team" class="chapter-dot" data-section="team"><span class="chapter-label">团队</span></a>
+  <a href="#info" class="chapter-dot" data-section="info"><span class="chapter-label">演出</span></a>
+  <a href="#gallery" class="chapter-dot" data-section="gallery"><span class="chapter-label">剧照</span></a>
+</nav>
+
+<!-- 顶部导航 -->
+<nav class="nav-bar" id="navbar">
+  <a href="#hero"><img src="img/logo2.png" alt="南墙芭莱" class="nav-logo"></a>
+  <div class="nav-links">
+    <a href="#synopsis" class="nav-link">简介</a>
+    <a href="#culture" class="nav-link">溯源</a>
+    <a href="#features" class="nav-link">特色</a>
+    <a href="#cast" class="nav-link">人物</a>
+    <a href="#video" class="nav-link">影像</a>
+    <a href="#team" class="nav-link">主创团队</a>
+    <a href="#info" class="nav-link">演出信息</a>
+    <a href="#gallery" class="nav-link">剧照画廊</a>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="img/hero-cover.jpg">
+    <source src="" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-fade-bottom"></div>
+  <div class="hero-content">
+    <img src="img/logo2.png" alt="南墙芭莱" class="logo-hero">
+    <div class="hero-ornament"></div>
+    <p class="hero-subtitle">广西首部街舞×民族舞跨界融合舞剧</p>
+  </div>
+  <div class="scroll-hint"><span>向下探索</span><div class="scroll-hint-arrow"></div></div>
+</section>
+
+<!-- ==================== 剧目简介 ==================== -->
+<section class="section synopsis-section" id="synopsis">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Synopsis</span>
+    <h2 class="section-title">剧目简介</h2>
+  </div>
+  <div class="synopsis-grid">
+    <div class="synopsis-col reveal">
+      <p class="synopsis-lead">广西首部街舞×民族舞跨界融合舞剧</p>
+      <p class="synopsis-body">《南墙芭莱》扎根<strong>骆越、花山岩画、布洛陀</strong>三大本土文化基底，结合崇左传统民俗，以潮流街舞碰撞传统民族舞蹈，全新演绎上古骆越族人敬畏自然、坚韧团结、守护家园的传奇故事，让千年广西文化以年轻化姿态新生绽放。</p>
+    </div>
+    <div class="synopsis-col reveal">
+      <p class="meaning-quote" style="font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.6rem,3.2vw,2.6rem);color:var(--gold);line-height:1.6;margin-bottom:1.5rem">"芭莱"——有画的山<br>"南墙"——不撞南墙不回头</p>
+      <p class="synopsis-body" style="margin-top:0">"芭莱"源自壮语，意为"<strong>有画的山</strong>"，特指广西花山岩画，承载千年骆越文明印记。"南墙"寓意<strong>骆越族人 不撞南墙不回头的坚韧与执着</strong>，诠释先民热爱生活、勇敢抗争、坚守信仰的精神内核。</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ==================== 文化溯源 ==================== -->
+<section class="section culture-section" id="culture">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Cultural Roots</span>
+    <h2 class="section-title">文化溯源</h2>
+    <p class="section-desc">三大文化基底，构筑舞剧的精神内核</p>
+  </div>
+  <div class="culture-grid">
+    <div class="culture-card reveal"><span class="culture-num">01</span><h3 class="culture-title">骆越文化</h3><p class="culture-text">岭南先秦古文明，依托左江稻作文化发展，孕育出铜鼓、壮锦、崖壁画等特色地域文化，是广西大地上最深远的文化根脉。</p></div>
+    <div class="culture-card reveal"><span class="culture-num">02</span><h3 class="culture-title">花山岩画</h3><p class="culture-text">距今两千余年的骆越文化瑰宝，真实记录远古族群祭祀、群居、歌舞的生活风貌，是舞剧"芭莱"之名的直接来源。</p></div>
+    <div class="culture-card reveal"><span class="culture-num">03</span><h3 class="culture-title">布洛陀文化</h3><p class="culture-text">骆越文化核心根源，代表守护、团结与担当，是《南墙芭莱》舞剧的精神核心，贯穿全剧叙事。</p></div>
+  </div>
+</section>
+
+<!-- ==================== 故事大纲 ==================== -->
+<section class="section story-section" id="story">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Story Outline</span>
+    <h2 class="section-title">故事大纲</h2>
+    <p class="section-desc">主线+支线双线叙事，宏大与温情并存</p>
+  </div>
+  <div class="story-content reveal">
+    <p>舞剧采用<strong>主线+支线双线叙事</strong>。主线讲述古骆越族群遭遇天灾，族首布洛陀带领族人举行图腾祭祀、祈求蛙神庇佑，凝心战胜灾害、迎来丰收。</p>
+    <p>支线辅以族人细腻的情感故事，兼具宏大叙事与人文温情，完整展现上古骆越族群的<strong>生命力</strong>。天灾降临时的群像、祭祀仪式的庄严、丰收时刻的狂喜——全剧以非线性的叙事结构，在远古与现代、传统与潮流之间自由切换。</p>
+    <p>剧目全长<strong>101.4分钟</strong>，以街舞的爆发力演绎上古传说，用身体的律动重写骆越史诗。每一个动作都是对先民的致敬，每一次跳跃都是文化的传承。</p>
+  </div>
+</section>
+
+<!-- ==================== 剧目特色 ==================== -->
+<section class="section features-section" id="features">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Features</span>
+    <h2 class="section-title">剧目特色</h2>
+    <p class="section-desc">四大特色，定义广西舞剧新范式</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal"><h3 class="feature-title">跨界首创</h3><p class="feature-text">广西首部街舞与民族舞融合舞剧，柔美的民族韵律结合动感街舞节奏，打造差异化全新视觉体验。</p></div>
+    <div class="feature-card reveal"><h3 class="feature-title">中西融合</h3><p class="feature-text">融汇街头潮流活力与传统国风雅致，创新舞蹈编排，形成独一无二的舞台风格。</p></div>
+    <div class="feature-card reveal"><h3 class="feature-title">本土沉浸式美学</h3><p class="feature-text">音乐、服饰、道具融入壮语、民族乐器、壮锦银饰、骆越图腾等本土元素，还原广西人文底蕴。</p></div>
+    <div class="feature-card reveal"><h3 class="feature-title">文化年轻化传承</h3><p class="feature-text">以青年喜爱的潮流舞蹈演绎古老传说，打破传统文化距离感，让非遗文化焕发新生。</p></div>
+  </div>
+</section>
+
+<!-- ==================== 编舞体系 ==================== -->
+<section class="section dance-section" id="dance">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Choreography</span>
+    <h2 class="section-title">编舞体系</h2>
+    <p class="section-desc">九大主流舞种，融汇国风舞台调度与街舞超强爆发力</p>
+  </div>
+  <div class="dance-content reveal">
+    <p class="dance-text">全剧融合<strong>HIP-HOP、BREAKING、POPPING、LOCKING、JAZZ、WAACKING、URBAN、壮族民族舞、现代舞</strong>九大主流舞种。以国风舞台调度为基底，结合街舞超强爆发力，打造新潮、多元、极具冲击力的视听盛宴。</p>
+    <div class="dance-tags">
+      <span class="dance-tag">HIP-HOP</span><span class="dance-tag">BREAKING</span><span class="dance-tag">POPPING</span><span class="dance-tag">LOCKING</span><span class="dance-tag">JAZZ</span><span class="dance-tag">WAACKING</span><span class="dance-tag">URBAN</span><span class="dance-tag">壮族民族舞</span><span class="dance-tag">现代舞</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 海报轮播 ==================== -->
+<section class="section poster-section" id="posters">
+  <div class="section-header" style="padding-bottom:0"><div class="reveal"><span class="section-label">Posters</span><h2 class="section-title">视觉海报</h2><p class="section-desc">全部海报轮播展示，悬停暂停 · 点击放大</p></div></div>
+  <div class="poster-carousel">
+    <div class="poster-track" id="posterTrack">
+      <img src="img/posters/插画完整版.jpg" alt="插画完整版" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧长海报.jpg" alt="舞剧长海报" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧3.jpg" alt="舞剧3" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧4.jpg" alt="舞剧4" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧6.jpg" alt="舞剧6" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新1.jpg" alt="舞剧新1" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新2.jpg" alt="舞剧新2" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新3.jpg" alt="舞剧新3" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新4.jpg" alt="舞剧新4" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新5.jpg" alt="舞剧新5" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新6.jpg" alt="舞剧新6" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新7.jpg" alt="舞剧新7" onclick="openLightbox(this.src)">
+      <!-- 重复用于无缝 -->
+      <img src="img/posters/插画完整版.jpg" alt="插画完整版" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧长海报.jpg" alt="舞剧长海报" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧3.jpg" alt="舞剧3" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧4.jpg" alt="舞剧4" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧6.jpg" alt="舞剧6" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新1.jpg" alt="舞剧新1" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新2.jpg" alt="舞剧新2" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新3.jpg" alt="舞剧新3" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新4.jpg" alt="舞剧新4" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新5.jpg" alt="舞剧新5" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新6.jpg" alt="舞剧新6" onclick="openLightbox(this.src)">
+      <img src="img/posters/舞剧新7.jpg" alt="舞剧新7" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 人物介绍 ==================== -->
+<section class="section cast-section" id="cast">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Cast & Characters</span>
+    <h2 class="section-title">人物介绍</h2>
+    <p class="section-desc">每一位舞者，都是文化记忆的承载体</p>
+  </div>
+  <div class="cast-grid">
+    <div class="cast-card reveal">
+      <img src="img/cast/布洛陀（郑凌云 饰）.png" alt="布洛陀" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">布洛陀</h3><p class="cast-role">The Creator God · 族群首领</p><p class="cast-actor">饰演：郑凌云</p><p class="cast-desc">族群首领、创世神明，果敢担当，危难时刻挺身而出，全心守护族群。是全剧的精神支柱与行动核心。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/洛西（黄之琛 饰）.png" alt="洛西" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">洛西</h3><p class="cast-role">Female Leader · 族群女性领袖</p><p class="cast-actor">饰演：黄之琛</p><p class="cast-desc">族群女性领袖，优雅善良、温柔果敢，守护族人、心怀万物。她的舞蹈柔美而充满内在力量。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/环青（李芮荻 饰）.png" alt="环青" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">环青</h3><p class="cast-role">The Youth · 正直刚强的青年</p><p class="cast-actor">饰演：李芮荻</p><p class="cast-desc">正直刚强的族群青年，热血向善、担当有为。他的街舞语汇充满力量感与爆发力。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/布曼（谭德铭 饰）.png" alt="布曼" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">布曼</h3><p class="cast-role">The Pillar · 族群中坚力量</p><p class="cast-actor">饰演：谭德铭</p><p class="cast-desc">活力勇敢、热忱坦荡，危难主动担当，是族群的中坚力量。Breaking是他的母语，地面是他表达忠诚的圣地。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/亚囊（覃雨婷 饰）.png" alt="亚囊" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">亚囊</h3><p class="cast-role">The Maiden · 族群的美好与生机</p><p class="cast-actor">饰演：覃雨婷</p><p class="cast-desc">温婉灵动、清丽纯粹，象征族群的美好与生机。她的舞姿如花山岩画上的人形，静谧而有力。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/㛞娅（李丽娟 饰）.png" alt="㛞娅" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">㛞娅</h3><p class="cast-role">The Keeper · 文化守护者</p><p class="cast-actor">饰演：李丽娟</p><p class="cast-desc">族群文化守护者，承载着先民的智慧与传统，在危难中坚守信仰，传递希望。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/莫溪(谢佳蔚 饰).png" alt="莫溪" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">莫溪</h3><p class="cast-role">The Messenger · 信息使者</p><p class="cast-actor">饰演：谢佳蔚</p><p class="cast-desc">连接族群内外的信息使者，以灵动的舞姿传递信息，在危机中穿梭，是希望的信使。</p></div>
+    </div>
+    <div class="cast-card reveal">
+      <img src="img/cast/达侬（黄千航 饰）.png" alt="达侬" class="cast-photo" loading="lazy">
+      <div class="cast-info"><h3 class="cast-name">达侬</h3><p class="cast-role">The Youth · 新生代力量</p><p class="cast-actor">饰演：黄千航</p><p class="cast-desc">新生代族群青年，代表着未来的希望与传承，以新兴的街舞语汇连接古今。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 导演大图（无框） ==================== -->
+
+<!-- ==================== 影像（16:9 框） ==================== -->
+<section class="section video-section" id="video">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Trailer</span>
+    <h2 class="section-title">影像</h2>
+    <p class="section-desc">先睹为快，一窥《南墙芭莱》的视觉世界</p>
+  </div>
+  <div class="video-frame-outer reveal">
+    <div class="video-frame" id="videoFrame">
+      <video controls preload="metadata" poster="img/hero-cover.jpg" id="mainVideo">
+        <source src="" type="video/mp4">
+        您的浏览器不支持视频播放，请升级浏览器。
+      </video>
+      <!-- 本地文件播放提示 -->
+      <div class="video-fallback" id="videoFallback">
+        <p>完整视频即将上线，敬请期待</p>
+        <button class="btn-play" onclick="tryPlay()">点击尝试播放</button>
+      </div>
+    </div>
+  </div>
+  <div class="video-tabs reveal">
+    <button class="video-tab active" onclick="switchVideo(0,this)">上集</button>
+    <button class="video-tab" onclick="switchVideo(1,this)">下集</button>
+  </div>
+</section>
+
+<!-- ==================== 主创团队 ==================== -->
+<section class="section team-section" id="team">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Team</span>
+    <h2 class="section-title">主创团队</h2>
+  </div>
+
+  <!-- 导演信息：左图右文（无边框无底色） -->
+  <div class="team-director reveal" style="max-width:900px;margin:0 auto 4rem;display:grid;grid-template-columns:320px 1fr;gap:3rem;align-items:center">
+    <img src="img/cast/总导演  编舞：姚倩婷.png" alt="姚倩婷" style="width:100%;height:auto;display:block;filter:grayscale(.12) contrast(1.06);transition:filter .5s,transform .5s">
+    <div style="padding:.5rem 0">
+      <p style="font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--gold-light);margin-bottom:.8rem;font-weight:700;line-height:1.3">总导演 / 编舞 &nbsp;&nbsp; 姚倩婷</p>
+      <p style="color:var(--text-secondary);font-size:clamp(.9rem,1.2vw,1.05rem);line-height:2.3;font-weight:300;margin-bottom:.8rem">南墙芭莱舞团团长、艺起舞赛事联合主理人、艺起舞艺术顾问</p>
+      <p style="color:var(--text-dim);font-size:.9rem;line-height:2.2">毕业于广西艺术学院 15 级歌舞表演专业</p>
+      <p style="color:var(--text-dim);font-size:.9rem;line-height:2.2">代表作：《花山祈稻》《青年》《腾格里诺海》《大英博物馆》等</p>
+    </div>
+  </div>
+
+  <!-- 分割线 -->
+  <div style="max-width:400px;margin:0 auto 3rem"><div class="chapter-divider reveal"><div class="divider-diamond"></div></div></div>
+
+  <!-- 团队信息表（每行分割线） -->
+  <div class="team-grid reveal" style="border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)">
+    <div class="team-item"><span class="team-role">编 剧</span><span class="team-name">郑凌云</span></div>
+    <div class="team-item"><span class="team-role">执行导演 / 编导</span><span class="team-name">黄之琛、谭德铭、谢佳蔚</span></div>
+    <div class="team-item"><span class="team-role">音乐制作</span><span class="team-name">韦宁、班诚杰</span></div>
+    <div class="team-item"><span class="team-role">服装设计</span><span class="team-name">朱韦斯霖</span></div>
+    <div class="team-item"><span class="team-role">视觉设计</span><span class="team-name">SMKC街舞视觉艺术</span></div>
+  </div>
+</section>
+
+<!-- ==================== 演出履历 ==================== -->
+<section class="section history-section" id="history">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Performance History</span>
+    <h2 class="section-title">演出履历</h2>
+  </div>
+  <div class="history-list reveal">
+    <div class="history-item"><span class="history-dot"></span>WOD世界齐舞大赛中国赛区 第五名</div>
+    <div class="history-item"><span class="history-dot"></span>国门之巅街舞赛事 表演嘉宾</div>
+    <div class="history-item"><span class="history-dot"></span>广西"艺起舞"官方演出嘉宾</div>
+    <div class="history-item"><span class="history-dot"></span>广西三月三惠民演出 参演剧目</div>
+    <div class="history-item"><span class="history-dot"></span>2026年 南宁剧场、安徽肥东剧场 巡演剧目</div>
+  </div>
+</section>
+
+<!-- ==================== 演出信息 ==================== -->
+<section class="section info-section" id="info">
+  <div class="chapter-divider reveal"><div class="divider-diamond"></div></div>
+  <div class="section-header reveal">
+    <span class="section-label">Info</span>
+    <h2 class="section-title">演出信息</h2>
+  </div>
+  <div class="info-grid reveal">
+    <div class="info-item"><div class="info-value">姚倩婷文化传媒工作室</div><div class="info-label">出品</div></div>
+    <div class="info-item"><div class="info-value">艺起舞品牌赛事、甘蔗夫妇</div><div class="info-label">联合监制</div></div>
+    <div class="info-item"><div class="info-value">2026年5月23日—24日</div><div class="info-label">首演时间</div></div>
+    <div class="info-item"><div class="info-value">南宁剧场</div><div class="info-label">首演地点</div></div>
+    <div class="info-item"><div class="info-value">101.4分钟</div><div class="info-label">总时长</div></div>
+  </div>
+</section>
+
+<!-- ==================== 结尾剧照画廊 ==================== -->
+<section class="section gallery-section" id="gallery">
+  <div class="section-header" style="padding-bottom:1rem">
+    <div class="reveal">
+      <span class="section-label">Gallery</span>
+      <h2 class="section-title">剧照画廊</h2>
+      <p class="section-desc">精彩剧照展示 · 点击放大浏览</p>
+    </div>
+  </div>
+  <div class="gallery-scroll reveal">
+    <img src="img/gallery/1.jpg" alt="剧照1" onclick="openLightbox(this.src)" loading="lazy">
+    <img src="img/gallery/2.jpg" alt="剧照2" onclick="openLightbox(this.src)" loading="lazy">
+    <img src="img/gallery/3.jpg" alt="剧照3" onclick="openLightbox(this.src)" loading="lazy">
+  
+    <img src="img/gallery/舞剧长海报.jpg" alt="舞剧长海报" onclick="openLightbox(this.src)" loading="lazy"></div>
+</section>
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <img src="img/logo2.png" alt="南墙芭莱" class="footer-logo">
+  <p class="footer-quote">花开花落，人去人归，唯有舞蹈永存</p>
+  <p class="footer-info">
+    《南墙芭莱》舞剧 &nbsp;·&nbsp; 广西南宁 &nbsp;·&nbsp;
+    出品：姚倩婷文化传媒工作室 &nbsp;·&nbsp; 联合监制：艺起舞品牌赛事、甘蔗夫妇<br>
+    未经授权禁止转载或用于商业用途
+  </p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="大图">
+</div>
+
+<script>
+/* ===== 滚动揭示 ===== */
+const reveals=document.querySelectorAll('.reveal');
+const revealObserver=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);revealObserver.unobserve(e.target)}
+  })
+},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
+reveals.forEach(r=>revealObserver.observe(r));
+
+/* ===== 导航栏 ===== */
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{navbar.classList.toggle('scrolled',window.scrollY>80)},{passive:true});
+
+/* ===== 右侧章节导航高亮 ===== */
+const chapters=document.querySelectorAll('.chapter-dot');
+const sectionIds=['hero','synopsis','culture','story','features','dance','posters','cast','video','team','history','info','gallery'];
+const sectionObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){chapters.forEach(c=>c.classList.toggle('active',c.dataset.section===e.target.id))}
+  })
+},{threshold:.3});
+sectionIds.forEach(id=>{const el=document.getElementById(id);if(el)sectionObserver.observe(el)});
+
+/* ===== 视频切换 ===== */
+const videos=['',''];
+function switchVideo(i,btn){
+  const v=document.getElementById('mainVideo');
+  v.src=videos[i];
+  document.querySelectorAll('.video-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  v.load();
+  document.getElementById('videoFallback').style.display='flex'
+}
+function tryPlay(){
+  const v=document.getElementById('mainVideo');
+  const promise=v.play();
+  if(promise!==undefined){promise.then(()=>{document.getElementById('videoFallback').style.display='none'}).catch(()=>{})}
+}
+
+/* ===== Lightbox ===== */
+function openLightbox(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('active');document.body.style.overflow='hidden'}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('active');document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
+
+/* ===== 平滑锚点 ===== */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})})
+});
+</script>
+</body>
+</html>
